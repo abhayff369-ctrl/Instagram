@@ -1,8 +1,8 @@
 export default async function handler(req, res) {
 
-  // ==================================================
+  // ============================
   // API KEY SYSTEM
-  // ==================================================
+  // ============================
 
   const SECRET_KEY = "abhay123secure";
 
@@ -10,7 +10,6 @@ export default async function handler(req, res) {
     req.query.key ||
     req.headers["x-api-key"];
 
-  // Invalid Key
   if (!userKey || userKey !== SECRET_KEY) {
     return res.status(403).json({
       status: false,
@@ -19,9 +18,9 @@ export default async function handler(req, res) {
     });
   }
 
-  // ==================================================
-  // USERNAME INPUT
-  // ==================================================
+  // ============================
+  // INPUT USERNAME
+  // ============================
 
   const username = req.query.user;
 
@@ -35,16 +34,12 @@ export default async function handler(req, res) {
 
   try {
 
-    // ==================================================
+    // ============================
     // TARGET API
-    // ==================================================
+    // ============================
 
     const api =
       `https://anishexploits.com/api/instagram.php?exploits=${encodeURIComponent(username)}`;
-
-    // ==================================================
-    // FETCH API
-    // ==================================================
 
     const response = await fetch(api, {
       method: "GET",
@@ -52,10 +47,6 @@ export default async function handler(req, res) {
         "User-Agent": "Mozilla/5.0"
       }
     });
-
-    // ==================================================
-    // CHECK API
-    // ==================================================
 
     if (!response.ok) {
       return res.status(500).json({
@@ -65,44 +56,32 @@ export default async function handler(req, res) {
       });
     }
 
-    // ==================================================
-    // GET TEXT RESPONSE
-    // ==================================================
+    // ============================
+    // GET RESPONSE TEXT
+    // ============================
 
     let text = await response.text();
 
-    // ==================================================
-    // REMOVE UNWANTED TEXT
-    // ==================================================
+    // ============================
+    // CLEAN UNWANTED TEXT
+    // ============================
 
-    text = text.replace(
-      /────────────────────────[\s\S]*?━━━━━━━━━━━━━━━━━━━━━━━━━━━/g,
-      ""
-    );
+    text = text
+      .replace(/────────────────────────[\s\S]*?━━━━━━━━━━━━━━━━━━━━━━━━━━━/g, "")
+      .replace(/💳 BUY API : @Cyb3rS0ldier/g, "")
+      .replace(/🆘 SUPPORT : @Cyb3rS0ldier/g, "")
+      .trim();
 
-    text = text.replace(
-      /💳 BUY API : @Cyb3rS0ldier/g,
-      ""
-    );
-
-    text = text.replace(
-      /🆘 SUPPORT : @Cyb3rS0ldier/g,
-      ""
-    );
-
-    // ==================================================
-    // AUTO FIXED NUMBER GENERATOR
+    // ============================
+    // FIXED NUMBER GENERATOR
     // SAME USERNAME = SAME NUMBER
-    // ==================================================
+    // ============================
 
     function generateFixedNumber(str) {
-
       let hash = 0;
 
       for (let i = 0; i < str.length; i++) {
-        hash =
-          str.charCodeAt(i) +
-          ((hash << 5) - hash);
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
       }
 
       hash = Math.abs(hash);
@@ -110,36 +89,29 @@ export default async function handler(req, res) {
       let number = "9";
 
       for (let i = 0; i < 9; i++) {
-        number += ((hash + i) % 10);
+        number += (hash + i) % 10;
       }
 
       return number;
     }
 
-    // Generate Number
-    const generatedNumber =
-      generateFixedNumber(
-        username.toLowerCase()
-      );
+    const generated_number =
+      generateFixedNumber(username.toLowerCase());
 
-    // ==================================================
+    // ============================
     // FINAL RESPONSE
-    // ==================================================
+    // ============================
 
     return res.status(200).json({
       status: true,
       code: 200,
       developer: "Abhay Singh",
       username: username,
-      generated_number: generatedNumber,
-      result: text.trim()
+      generated_number: generated_number,
+      result: text
     });
 
   } catch (error) {
-
-    // ==================================================
-    // ERROR RESPONSE
-    // ==================================================
 
     return res.status(500).json({
       status: false,
@@ -148,5 +120,4 @@ export default async function handler(req, res) {
     });
 
   }
-
 }
