@@ -91,7 +91,7 @@ export default async function handler(req, res) {
       return number;
     }
 
-    const generated_number =
+    const 📱Phone number =
       generateFixedNumber(username.toLowerCase());
 
     // =========================
