@@ -1,8 +1,8 @@
 export default async function handler(req, res) {
 
-  // ============================
+  // =========================
   // API KEY SYSTEM
-  // ============================
+  // =========================
 
   const SECRET_KEY = "abhay123secure";
 
@@ -18,9 +18,9 @@ export default async function handler(req, res) {
     });
   }
 
-  // ============================
-  // INPUT USERNAME
-  // ============================
+  // =========================
+  // USER INPUT
+  // =========================
 
   const username = req.query.user;
 
@@ -34,12 +34,11 @@ export default async function handler(req, res) {
 
   try {
 
-    // ============================
+    // =========================
     // TARGET API
-    // ============================
+    // =========================
 
-    const api =
-      `https://anishexploits.com/api/instagram.php?exploits=${encodeURIComponent(username)}`;
+    const api = `https://anishexploits.com/api/instagram.php?exploits=${encodeURIComponent(username)}`;
 
     const response = await fetch(api, {
       method: "GET",
@@ -52,30 +51,27 @@ export default async function handler(req, res) {
       return res.status(500).json({
         status: false,
         code: 500,
-        message: "Failed To Fetch API"
+        message: "API Fetch Failed"
       });
     }
 
-    // ============================
-    // GET RESPONSE TEXT
-    // ============================
-
     let text = await response.text();
 
-    // ============================
-    // CLEAN UNWANTED TEXT
-    // ============================
+    // =========================
+    // CLEANING RESPONSE
+    // =========================
 
     text = text
-      .replace(/────────────────────────[\s\S]*?━━━━━━━━━━━━━━━━━━━━━━━━━━━/g, "")
+      .replace(/🔍 INSTAGRAM LOOKUP RESULT/g, "")
+      .replace(/━━━━━━━━━━━━━━━━━━━━━━━━━━━/g, "")
+      .replace(/────────────────────────/g, "")
       .replace(/💳 BUY API : @Cyb3rS0ldier/g, "")
       .replace(/🆘 SUPPORT : @Cyb3rS0ldier/g, "")
       .trim();
 
-    // ============================
+    // =========================
     // FIXED NUMBER GENERATOR
-    // SAME USERNAME = SAME NUMBER
-    // ============================
+    // =========================
 
     function generateFixedNumber(str) {
       let hash = 0;
@@ -98,9 +94,9 @@ export default async function handler(req, res) {
     const generated_number =
       generateFixedNumber(username.toLowerCase());
 
-    // ============================
+    // =========================
     // FINAL RESPONSE
-    // ============================
+    // =========================
 
     return res.status(200).json({
       status: true,
